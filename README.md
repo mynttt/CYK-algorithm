@@ -23,7 +23,8 @@ X b
 Y a
 Z BB
 
-For a token terminal, simply add the token like a normal terminal. For example Y token will be parsed as Y -> token.
+For a token terminal, simply add the token like a normal terminal. 
+For example Y token will be parsed as Y -> token.
 ```
 
 After you compiled the .java file you can simply run it via
