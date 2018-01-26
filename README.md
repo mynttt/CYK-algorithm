@@ -15,7 +15,7 @@ S                             -> Starting Symbol
 a b                           -> Terminals
 S A B E C X Y Z               -> Non-Terminals
 S YB XA *                     -> 4th and all following lines are production rules
-E YB XA                       -> You can add multiple non-terminal -> (terminal|non-terminal) relations if you seperate them by a space
+E YB XA                       -> You can add multiple non-terminal -> (terminal|non-terminal) relations by seperating via space
 A a YE XC                     -> This reads as A -> a | YE | XC
 B b XE YZ
 C AA
