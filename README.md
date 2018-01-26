@@ -15,13 +15,15 @@ S                             -> Starting Symbol
 a b                           -> Terminals
 S A B E C X Y Z               -> Non-Terminals
 S YB XA *                     -> 4th and all following lines are production rules
-E YB XA                       -> You can add multiple non-terminal -> (terminal|non-terminal) relations by seperating via space
+E YB XA                       -> You can add multiple rules from one terminal by seperating via whitespace
 A a YE XC                     -> This reads as A -> a | YE | XC
 B b XE YZ
 C AA
 X b
 Y a
 Z BB
+
+For a token terminal, simply add the token like a normal terminal. For example Y token will be parsed as Y -> token.
 ```
 
 After you compiled the .java file you can simply run it via
