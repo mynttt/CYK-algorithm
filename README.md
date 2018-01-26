@@ -15,7 +15,7 @@ S                             -> Starting Symbol
 a b                           -> Terminals
 S A B E C X Y Z               -> Non-Terminals
 S YB XA *                     -> 4th and all following lines are production rules
-E YB XA                       -> You can add multiple to one terminal if you seperate them by a space
+E YB XA                       -> You can add multiple non-terminal -> (terminal|non-terminal) relations if you seperate them by a space
 A a YE XC                     -> This reads as A -> a | YE | XC
 B b XE YZ
 C AA
@@ -30,7 +30,7 @@ After you compiled the .java file you can simply run it via
 java CYK <GrammarFile> <Word>
 ```
 
-Sample output for the supplied grammar above:
+Sample output for the supplied grammar above using the word abbabaa:
 
 ```
 $ java CYK grammar.txt abbbabaa
@@ -72,3 +72,40 @@ Applying CYK-Algorithm:
 
 The word abbbabaa is an element of the CFG G and can be derived from it.
 ```
+## Grammars with token words
+
+This application also supports token words, that means you define a terminal as a whole string. The token detection gets triggered automatically once you pass more than two arguments. Sample output below.
+
+```
+$ java CYK test.txt test is a test
+Word: test is a test
+
+G = ({this, is, a, test}, {S, A, B, E, C, X, Y, Z}, P, S)
+
+With Productions P as:
+A -> this | YE | XC
+B -> is | XE | YZ
+C -> AA
+E -> YB | XA
+S -> YB | XA | *
+X -> a
+Y -> test
+Z -> BB
+
+Applying CYK-Algorithm:
+
++--------+--------+--------+--------+
+| test   | is     | a      | test   |
++--------+--------+--------+--------+
+| Y      | B      | X      | Y      |
++--------+--------+--------+--------+
+| E,S    | -      | -      |
++--------+--------+--------+
+| -      | -      |
++--------+--------+
+| -      |
++--------+
+
+The word "test is a test" is not an element of the CFG G and can not be derived from it.
+```
+
