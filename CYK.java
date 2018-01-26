@@ -5,12 +5,18 @@ public class CYK{
 
     public static String word;
     public static String startingSymbol;
+    public static boolean isTokenWord = false;
     public static ArrayList<String> terminals = new ArrayList<String>();
     public static ArrayList<String> nonTerminals = new ArrayList<String>();
     public static TreeMap<String,ArrayList<String>> grammar = new TreeMap<>();
 
     public static void main(String[] args){
-        if(args.length != 2){ System.out.println("Usage: java CYK <File> <Word>."); System.exit(1); }
+        if(args.length < 2){ 
+            System.out.println("Usage: java CYK <File> <Word>."); 
+            System.exit(1); 
+        }else if (args.length > 2){
+            isTokenWord = true;
+        }
         doSteps(args);
     }
 
@@ -25,12 +31,12 @@ public class CYK{
         ArrayList<String> tmp = new ArrayList<>();
         int line = 2;
 
-        word = args[1];
+        word = getWord(args);
         startingSymbol = input.next();
         input.nextLine();
 
         while(input.hasNextLine() && line <= 3){
-            tmp.addAll(Arrays.<String>asList(input.nextLine().split("\\s")));
+            tmp.addAll(Arrays.<String>asList(toArray(input.nextLine())));
             if(line == 2) { terminals.addAll(tmp); }
             if(line == 3) { nonTerminals.addAll(tmp); }
             tmp.clear();
@@ -38,7 +44,7 @@ public class CYK{
         }
 
         while(input.hasNextLine()){
-            tmp.addAll(Arrays.<String>asList(input.nextLine().split("\\s")));
+            tmp.addAll(Arrays.<String>asList(toArray(input.nextLine())));
             String leftSide = tmp.get(0);
             tmp.remove(0);
             grammar.put(leftSide, new ArrayList<String>());
@@ -46,6 +52,15 @@ public class CYK{
             tmp.clear();
         }
         input.close();
+    }
+
+    public static String getWord(String[] args){
+        if(!isTokenWord) { return args[1]; }
+        String[] argsWithoutFile = new String[args.length - 1];
+        for(int i = 1; i < args.length; i++){
+            argsWithoutFile[i-1] = args[i];
+        }
+        return toString(argsWithoutFile);
     }
 
     public static void printResult (String[][] cykTable){
@@ -93,9 +108,9 @@ public class CYK{
         System.out.println(low+"\n");
     //Step 4: Evaluate success.
         if(cykTable[cykTable.length-1][cykTable[cykTable.length-1].length-1].contains(startingSymbol)){
-            System.out.println("The word " + word + " is an element of the CFG G and can be derived from it.");
+            System.out.println("The word \"" + word + "\" is an element of the CFG G and can be derived from it.");
         }else{
-            System.out.println("The word " + word + " is not an element of the CFG G and can not be derived from it.");
+            System.out.println("The word \"" + word + "\" is not an element of the CFG G and can not be derived from it.");
         }
     }
 
@@ -111,10 +126,11 @@ public class CYK{
 
 //Jagged Array for the Algorithm
     public static String[][] createCYKTable (){
-        String[][] cykTable = new String[word.length() + 1][];
-        cykTable[0] = new String[word.length()];
+        int length = isTokenWord ? toArray(word).length : word.length();
+        String[][] cykTable = new String[length + 1][];
+        cykTable[0] = new String[length];
         for(int i = 1; i < cykTable.length; i++){
-            cykTable[i] = new String[word.length() - (i - 1)];
+            cykTable[i] = new String[length - (i - 1)];
         }
         for(int i = 1; i < cykTable.length; i++){
             for(int j = 0; j < cykTable[i].length; j++){
@@ -127,7 +143,7 @@ public class CYK{
     public static String[][] doCyk(String[][] cykTable){
     //Step 1: Fill header row
         for(int i = 0; i < cykTable[0].length; i++){
-            cykTable[0][i] = Character.toString(word.charAt(i));
+            cykTable[0][i] = manageWord(word, i);
         }
     //Step 2: Get productions for terminals
         for(int i = 0; i < cykTable[1].length; i++){
@@ -167,6 +183,11 @@ public class CYK{
             }
         }
         return cykTable;
+    }
+
+    public static String manageWord(String word, int position){
+        if(!isTokenWord){ return Character.toString(word.charAt(position)); }
+        return toArray(word)[position];
     }
 
     public static String[] checkIfProduces(String[] toCheck){
