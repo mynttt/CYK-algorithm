@@ -2,7 +2,7 @@
 
 ## A Java implementation of the CYK-Algorithm.
 
-The CYK-Algorithm can be used to check if a word can be derived from a CFG (context-sensitive grammar).
+The CYK-Algorithm can be used to check if a word can be derived from a CFG (context-free grammar).
 
 You only need your grammar to be in the CNF (Chomsky normal form) format. This Java application will parse an external grammar file and then output the result visualized in a table.
 
